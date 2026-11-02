@@ -1,5 +1,5 @@
 # Herd Immunity Simulation
-This project is a basic simulation of *Herd Immunity*, which models how a virus moves through a population where some (but not all) of a population is vaccinated against the virus.
+This project simulates *Herd Immunity*, modeling how a virus moves through a population where some (but not all) of a population is vaccinated against the virus.
 
 > #### Nolt's Note
 > This project template was originally created in 2018/2019, before the COVID-19 pandemic.
