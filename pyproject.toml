@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "herd-immunity-simulation-cli"
+version = "0.1.0"
+requires-python = ">=3.10"
+description = "A command-line herd immunity simulation"
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools]
+py-modules = ["logger", "person", "population", "simulation", "virus"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

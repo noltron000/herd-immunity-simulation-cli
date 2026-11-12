@@ -29,6 +29,13 @@ In particular, you could check out out the methods `run()`, `cycle_step()`, and 
 	- You will see the output in your terminal.
 		It will also generate a text logfile (although its contents may be exactly the same as the included textfile, so no perceivable file changes may occur).
 
+### Running Tests
+Install the project's test dependencies, then run the suite from the repository root:
+~~~bash
+python -m pip install -e ".[test]"
+python -m pytest
+~~~
+
 #### Customizing Inputs
 By default, this project runs a simulation of Ebola, set up as a default at the end of `src/simulation.py`.
 That uses the following parameters:

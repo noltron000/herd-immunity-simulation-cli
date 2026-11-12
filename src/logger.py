@@ -8,13 +8,6 @@ from virus import Virus
 class Logger(object):
 	'''Utility class responsible for logging simulation interactions to a file.'''
 
-	# XXX TODO XXX
-	# Write a test suite for this class to make sure each method is working as expected.
-
-	# XXX HINT XXX
-	# Try to write your tests before you solve each function,
-	# that way you can test them one by one as you write your class.
-
 	@staticmethod
 	def generate_file_name(population: Population, virus: Virus):
 		'''
