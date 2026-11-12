@@ -5,7 +5,7 @@ from virus import Virus
 # Logger Class #
 ################
 
-class Logger(object):
+class Logger:
 	'''Utility class responsible for logging simulation interactions to a file.'''
 
 	@staticmethod
@@ -38,8 +38,8 @@ class Logger(object):
 		# XXX NOTE XXX
 		# Use 'w' mode when you open the file to overwrite the old data with the new.
 		# For all other methods, use the 'a' mode to append a new log to the end.
-		logfile = open(self.file_name, "w")
-		logfile.close()
+		with open(self.file_name, "w") as logfile:
+			logfile.truncate()
 
 	def write(self, content: str, verbose = True):
 		'''Writes the given content to the logfile.'''
@@ -48,14 +48,10 @@ class Logger(object):
 
 		# XXX NOTE XXX
 		# Use 'a' mode to append content to the logfile.
-		logfile = open(self.file_name, "a")
-
-		# Write the given content...
-		logfile.write(content)
-		logfile.write('\n') # This newline helps emulate the behavior of print statements.
-
-		# Close the file - leaving it open can cause problems elsewhere.
-		logfile.close()
+		with open(self.file_name, "a") as logfile:
+			# Write the given content...
+			logfile.write(content)
+			logfile.write("\n") # This newline helps emulate the behavior of print statements.
 
 	def log_metadata(self, population: Population, virus: Virus):
 		'''
@@ -123,7 +119,7 @@ class Logger(object):
 		# along with whether they are sick or vaccinated when they interact,
 		# to determine exactly what happened during the interaction.
 		# Then, create a String, and write to your logfile.
-		pass
+		pass  # noqa: PIE790
 
 	def log_infection_survival(self, person, did_die_from_infection):
 		'''
@@ -140,7 +136,7 @@ class Logger(object):
 		# If the person survives, then `did_die_from_infection` should be `False`.
 		# Otherwise, `did_die_from_infection` should be `True`.
 		# Append the results of the infection to the logfile.
-		pass
+		pass  # noqa: PIE790
 
 	def log_cycle(
 			self,

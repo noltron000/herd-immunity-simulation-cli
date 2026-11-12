@@ -1,7 +1,10 @@
-import math, random
-random.seed(42)
+import math
+import random
+
 from person import Person
 from virus import Virus
+
+random.seed(42)
 
 ####################
 # Population Class #

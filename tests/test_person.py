@@ -15,12 +15,12 @@ def test_vacc_person_instantiation():
 
 @pytest.mark.skip(reason="TODO: complete the assertions for an unvaccinated person.")
 def test_not_vacc_person_instantiation():
-	person = Person(2, False)
+	person = Person(2, False)  # noqa: F841
 
 	# XXX TODO XXX
 	# Complete your own assert statements that test the values at each attribute.
 	# assert ...
-	pass
+	pass  # noqa: PIE790
 
 
 @pytest.mark.skip(reason="TODO: complete the assertions for an infected person.")
@@ -29,12 +29,12 @@ def test_sick_person_instantiation():
 	virus = Virus("Dysentery", 0.7, 0.2)
 
 	# Create a `Person` object and give them the virus infection.
-	person = Person(3, False, virus)
+	person = Person(3, False, virus)  # noqa: F841
 
 	# XXX TODO XXX
 	# Complete your own assert statements that test the values at each attribute.
 	# assert ...
-	pass
+	pass  # noqa: PIE790
 
 
 @pytest.mark.skip(reason="TODO: complete this test for resolve_infection().")

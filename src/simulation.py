@@ -1,9 +1,12 @@
-import random, sys
-random.seed(42)
+import random
+import sys
+
 from logger import Logger
 from person import Person
 from population import Population
 from virus import Virus
+
+random.seed(42)
 
 ####################
 # Simulation Class #
@@ -57,15 +60,13 @@ class Simulation:
 				`True` for simulation should continue, `False` if it should end.
 		'''
 		# Everyone is dead!
-		if len(self.population.filter(is_alive=True)) == 0:
-			return False
+		has_living_people = len(self.population.filter(is_alive=True)) > 0
 
 		# No one is infected!
-		elif len(self.population.filter(is_infected=True)) == 0:
-			return False
+		has_infected_people = len(self.population.filter(is_infected=True)) > 0
 
 		# Simulation needs to continue.
-		else: return True
+		return has_living_people and has_infected_people
 
 
 	def run(self):
