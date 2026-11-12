@@ -59,13 +59,14 @@ class Logger:
 		the specific parameters of the simulation as the first line of the file.
 		'''
 
-		# XXX TODO XXX
-		# The basic header information is pretty bare-bones for now.
-		# I can't really think of anything else that would need to go here.
-		# Maybe an author field and a creation timestamp?
 		content = (
 			"====== HERD IMMUNITY SIMULATION ======\n"
 			f"Virus Name: {virus.name}\n"
+			f"Reproduction Rate: {virus.reproduction_rate}\n"
+			f"Mortality Rate: {virus.mortality_rate}\n"
+			f"Population Size: {population.size}\n"
+			f"Vaccination Rate: {population.vaccination_rate}\n"
+			f"Initial Infections: {population.initial_infections}\n"
 		)
 		self.write(content)
 
@@ -81,6 +82,22 @@ class Logger:
 			total_deaths = 0,
 			total_immune = population.initial_vaccinations,
 		)
+
+	def log_vaccination_request_exceeded(self, requested: int, vaccinated: int):
+		if requested > vaccinated:
+			self.write(
+				f"Could not vaccinate all requested people: "
+				f"requested {requested}, vaccinated {vaccinated}.",
+				verbose=False,
+			)
+
+	def log_infection_request_exceeded(self, requested: int, infected: int):
+		if requested > infected:
+			self.write(
+				f"Could not infect all requested people: "
+				f"requested {requested}, infected {infected}.",
+				verbose=False,
+			)
 
 	def log_interaction(
 			self,

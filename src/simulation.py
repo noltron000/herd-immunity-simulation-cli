@@ -50,6 +50,15 @@ class Simulation:
 		file_name = Logger.generate_file_name(population, virus)
 		self.logger = Logger(file_name)
 
+		self.logger.log_vaccination_request_exceeded(
+			population.initial_vaccinations,
+			len(population.filter(is_vaccinated=True)),
+		)
+		self.logger.log_infection_request_exceeded(
+			population.initial_infections,
+			len(population.filter(is_infected=True)),
+		)
+
 	def should_continue(self):
 		'''
 		The simulation should only end if the entire population is dead,
