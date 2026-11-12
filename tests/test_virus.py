@@ -10,7 +10,9 @@ def test_virus_instantiation():
 	assert virus.name == "HIV"
 	assert virus.reproduction_rate == 0.8
 	assert virus.mortality_rate == 0.3
+def test_other_virus():
+	virus = Virus("Influenza", 0.5, 0.1)
 
-
-# XXX TODO XXX
-# Create your own tests that model other viruses.
+	assert virus.name == "Influenza"
+	assert virus.reproduction_rate == 0.5
+	assert virus.mortality_rate == 0.1

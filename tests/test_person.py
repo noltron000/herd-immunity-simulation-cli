@@ -1,5 +1,3 @@
-import pytest
-
 from person import Person
 from virus import Virus
 
@@ -13,56 +11,42 @@ def test_vacc_person_instantiation():
 	assert person.infection is None
 
 
-@pytest.mark.skip(reason="TODO: complete the assertions for an unvaccinated person.")
 def test_not_vacc_person_instantiation():
-	person = Person(2, False)  # noqa: F841
+	person = Person(2, False)
 
-	# XXX TODO XXX
-	# Complete your own assert statements that test the values at each attribute.
-	# assert ...
-	pass  # noqa: PIE790
+	assert person._id == 2
+	assert person.is_alive is True
+	assert person.is_vaccinated is False
+	assert person.infection is None
+	assert person.is_infected is False
 
 
-@pytest.mark.skip(reason="TODO: complete the assertions for an infected person.")
 def test_sick_person_instantiation():
-	# Create a `Virus` object to give a `Person` object an infection.
 	virus = Virus("Dysentery", 0.7, 0.2)
+	person = Person(3, False, virus)
 
-	# Create a `Person` object and give them the virus infection.
-	person = Person(3, False, virus)  # noqa: F841
-
-	# XXX TODO XXX
-	# Complete your own assert statements that test the values at each attribute.
-	# assert ...
-	pass  # noqa: PIE790
+	assert person._id == 3
+	assert person.is_alive is True
+	assert person.is_vaccinated is False
+	assert person.infection is virus
+	assert person.is_infected is True
 
 
-@pytest.mark.skip(reason="TODO: complete this test for resolve_infection().")
-def test_did_survive_infection():
-	# XXX TODO XXX
-	# Create a `Virus` object to give a `Person` object an infection.
+def test_did_survive_infection(monkeypatch):
 	virus = Virus("Dysentery", 0.7, 0.2)
+	survivor = Person(4, False, virus)
+	deceased = Person(5, False, virus)
 
-	# XXX TODO XXX
-	# Create a `Person` object and give them the virus infection.
-	person = Person(4, False, virus)
+	# Set deterministic rolls to check both possible outcomes.
+	rolls = iter((0.9, 0.1))
+	monkeypatch.setattr("person.random.random", lambda: next(rolls))
 
-	# Resolve whether the `Person` survives the infection or not.
-	survived = person.resolve_infection()
+	assert survivor.resolve_infection() is True
+	assert survivor.is_alive is True
+	assert survivor.is_vaccinated is True
+	assert survivor.infection is None
 
-	# Check if the `Person` survived or not.
-	if survived:
-		assert person.is_alive is True
-
-		# XXX TODO XXX
-		# Write your own assert statements that test the values of
-		# each attribute for a `Person` who survived.
-		assert False # Replace with something else.
-
-	else:
-		assert person.is_alive is False
-
-		# XXX TODO XXX
-		# Write your own assert statements that test the values of
-		# each attribute for a `Person` who did not survive.
-		assert False # Replace with something else.
+	assert deceased.resolve_infection() is False
+	assert deceased.is_alive is False
+	assert deceased.is_vaccinated is False
+	assert deceased.infection is None
