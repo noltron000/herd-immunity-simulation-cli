@@ -140,6 +140,8 @@ class Simulation:
 		# First, kill sick people.
 		for infected in self.population.filter(is_dormant=False):
 			survives = infected.resolve_infection()
+			# WARN: Disabled this logger because it spammed too many entries.
+			# self.logger.log_infection_survival(infected, not survives)
 			if survives: newly_immune.append(infected)
 			else: new_deaths.append(infected)
 
@@ -176,10 +178,18 @@ class Simulation:
 
 		# To spread an infection, one person must be sick,
 		# and the other person must not be sick.
-		if person1.infection is not None and person2.infection is None:
-			person2.resolve_exposure(person1.infection)  # Resolve the exposure...
-		if person2.infection is not None and person1.infection is None:
-			person1.resolve_exposure(person2.infection)  # Resolve the exposure...
+		infected_person = person1 if person1.infection is not None else person2
+		exposed_person = person2 if infected_person is person1 else person1
+
+		# Determine if an infection occured, and return the boolean.
+		did_infect = False
+		if infected_person.infection is not None:
+			did_infect = exposed_person.resolve_exposure(infected_person.infection)
+
+		# WARN: Disabled this logger because it spammed too many entries.
+		# self.logger.log_interaction(infected_person, exposed_person, did_infect)
+
+		return did_infect
 
 ##################
 # CLI Entrypoint #

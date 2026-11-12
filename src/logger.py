@@ -86,7 +86,7 @@ class Logger:
 			self,
 
 			# XXX HINT XXX
-			# The `person` parameter should always be sick.
+			# The `person` parameter is usually sick.
 			person,
 
 			# XXX HINT XXX
@@ -101,7 +101,7 @@ class Logger:
 		):
 		'''
 		The Simulation object should use this method to log
-		every interaction a sick person has during each time step.
+		every interaction during each time step.
 
 		The format of the log should be:
 			`"{person.ID} infects {random_person.ID}.\\n"`
@@ -111,15 +111,27 @@ class Logger:
 			because {ex. 'vaccinated' or 'already sick'}.\\n"`
 		'''
 
-		# XXX TODO XXX
-		# Finish this method.
-		# Think about how the booleans that passed (or did not pass)
-		# represent all the possible edge cases.
-		# Use the values passed along with each person,
-		# along with whether they are sick or vaccinated when they interact,
-		# to determine exactly what happened during the interaction.
-		# Then, create a String, and write to your logfile.
-		pass  # noqa: PIE790
+		if not person.is_infected:
+			content = (
+				f"{person._id} and {random_person._id} interacted; "
+				"neither was infected."
+			)
+		elif did_infect:
+			content = f"{person._id} infects {random_person._id}."
+		elif random_person.is_infected:
+			content = (
+				f"{person._id} didn't infect {random_person._id} "
+				"because they were already sick."
+			)
+		elif random_person.is_vaccinated:
+			content = (
+				f"{person._id} didn't infect {random_person._id} "
+				"because they were vaccinated."
+			)
+		else:
+			content = f"{person._id} didn't infect {random_person._id}."
+
+		self.write(content, verbose=False)
 
 	def log_infection_survival(self, person, did_die_from_infection):
 		'''
@@ -131,12 +143,12 @@ class Logger:
 			or "{person.ID} survived infection.\\n"`
 		'''
 
-		# XXX TODO XXX
-		# Finish this method.
-		# If the person survives, then `did_die_from_infection` should be `False`.
-		# Otherwise, `did_die_from_infection` should be `True`.
-		# Append the results of the infection to the logfile.
-		pass  # noqa: PIE790
+		if did_die_from_infection:
+			content = f"{person._id} died from infection."
+		else:
+			content = f"{person._id} survived infection."
+
+		self.write(content, verbose=False)
 
 	def log_cycle(
 			self,
