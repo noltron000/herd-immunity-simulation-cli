@@ -1,4 +1,4 @@
-import math, random, sys
+import random, sys
 random.seed(42)
 from logger import Logger
 from person import Person
@@ -173,27 +173,12 @@ class Simulation:
 		assert person1.is_alive == True
 		assert person2.is_alive == True
 
-		# Determine if someone getting sick is even possible.
-		if person1.infection == person2.infection:
-			# Both people are sick (or neither are sick)!
-			# Nothing happens in either scenario.
-			pass
-
-		# One person must be sick, and the other is not.
-		# This may cause an infection...
-		else:
-			# Determine who is sick, and who is not.
-			sick_person: Person
-			healthy_person: Person
-			if person1.infection != None:
-				sick_person = person1
-				healthy_person = person2
-			else:
-				sick_person = person2
-				healthy_person = person1
-
-			# Resolve the exposure...
-			healthy_person.resolve_exposure(sick_person.infection)
+		# To spread an infection, one person must be sick,
+		# and the other person must not be sick.
+		if person1.infection is not None and person2.infection is None:
+			person2.resolve_exposure(person1.infection)  # Resolve the exposure...
+		if person2.infection is not None and person1.infection is None:
+			person1.resolve_exposure(person2.infection)  # Resolve the exposure...
 
 ##################
 # CLI Entrypoint #

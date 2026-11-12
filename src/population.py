@@ -1,4 +1,4 @@
-import math, random, sys
+import math, random
 random.seed(42)
 from person import Person
 from virus import Virus
