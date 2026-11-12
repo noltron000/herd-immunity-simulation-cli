@@ -5,15 +5,8 @@ from virus import Virus
 # Logger Class #
 ################
 
-class Logger(object):
+class Logger:
 	'''Utility class responsible for logging simulation interactions to a file.'''
-
-	# XXX TODO XXX
-	# Write a test suite for this class to make sure each method is working as expected.
-
-	# XXX HINT XXX
-	# Try to write your tests before you solve each function,
-	# that way you can test them one by one as you write your class.
 
 	@staticmethod
 	def generate_file_name(population: Population, virus: Virus):
@@ -45,8 +38,8 @@ class Logger(object):
 		# XXX NOTE XXX
 		# Use 'w' mode when you open the file to overwrite the old data with the new.
 		# For all other methods, use the 'a' mode to append a new log to the end.
-		logfile = open(self.file_name, "w")
-		logfile.close()
+		with open(self.file_name, "w") as logfile:
+			logfile.truncate()
 
 	def write(self, content: str, verbose = True):
 		'''Writes the given content to the logfile.'''
@@ -55,14 +48,10 @@ class Logger(object):
 
 		# XXX NOTE XXX
 		# Use 'a' mode to append content to the logfile.
-		logfile = open(self.file_name, "a")
-
-		# Write the given content...
-		logfile.write(content)
-		logfile.write('\n') # This newline helps emulate the behavior of print statements.
-
-		# Close the file - leaving it open can cause problems elsewhere.
-		logfile.close()
+		with open(self.file_name, "a") as logfile:
+			# Write the given content...
+			logfile.write(content)
+			logfile.write("\n") # This newline helps emulate the behavior of print statements.
 
 	def log_metadata(self, population: Population, virus: Virus):
 		'''
@@ -70,13 +59,14 @@ class Logger(object):
 		the specific parameters of the simulation as the first line of the file.
 		'''
 
-		# XXX TODO XXX
-		# The basic header information is pretty bare-bones for now.
-		# I can't really think of anything else that would need to go here.
-		# Maybe an author field and a creation timestamp?
 		content = (
 			"====== HERD IMMUNITY SIMULATION ======\n"
 			f"Virus Name: {virus.name}\n"
+			f"Reproduction Rate: {virus.reproduction_rate}\n"
+			f"Mortality Rate: {virus.mortality_rate}\n"
+			f"Population Size: {population.size}\n"
+			f"Vaccination Rate: {population.vaccination_rate}\n"
+			f"Initial Infections: {population.initial_infections}\n"
 		)
 		self.write(content)
 
@@ -93,11 +83,27 @@ class Logger(object):
 			total_immune = population.initial_vaccinations,
 		)
 
+	def log_vaccination_request_exceeded(self, requested: int, vaccinated: int):
+		if requested > vaccinated:
+			self.write(
+				f"Could not vaccinate all requested people: "
+				f"requested {requested}, vaccinated {vaccinated}.",
+				verbose=False,
+			)
+
+	def log_infection_request_exceeded(self, requested: int, infected: int):
+		if requested > infected:
+			self.write(
+				f"Could not infect all requested people: "
+				f"requested {requested}, infected {infected}.",
+				verbose=False,
+			)
+
 	def log_interaction(
 			self,
 
 			# XXX HINT XXX
-			# The `person` parameter should always be sick.
+			# The `person` parameter is usually sick.
 			person,
 
 			# XXX HINT XXX
@@ -112,7 +118,7 @@ class Logger(object):
 		):
 		'''
 		The Simulation object should use this method to log
-		every interaction a sick person has during each time step.
+		every interaction during each time step.
 
 		The format of the log should be:
 			`"{person.ID} infects {random_person.ID}.\\n"`
@@ -122,15 +128,27 @@ class Logger(object):
 			because {ex. 'vaccinated' or 'already sick'}.\\n"`
 		'''
 
-		# XXX TODO XXX
-		# Finish this method.
-		# Think about how the booleans that passed (or did not pass)
-		# represent all the possible edge cases.
-		# Use the values passed along with each person,
-		# along with whether they are sick or vaccinated when they interact,
-		# to determine exactly what happened during the interaction.
-		# Then, create a String, and write to your logfile.
-		pass
+		if not person.is_infected:
+			content = (
+				f"{person._id} and {random_person._id} interacted; "
+				"neither was infected."
+			)
+		elif did_infect:
+			content = f"{person._id} infects {random_person._id}."
+		elif random_person.is_infected:
+			content = (
+				f"{person._id} didn't infect {random_person._id} "
+				"because they were already sick."
+			)
+		elif random_person.is_vaccinated:
+			content = (
+				f"{person._id} didn't infect {random_person._id} "
+				"because they were vaccinated."
+			)
+		else:
+			content = f"{person._id} didn't infect {random_person._id}."
+
+		self.write(content, verbose=False)
 
 	def log_infection_survival(self, person, did_die_from_infection):
 		'''
@@ -142,12 +160,12 @@ class Logger(object):
 			or "{person.ID} survived infection.\\n"`
 		'''
 
-		# XXX TODO XXX
-		# Finish this method.
-		# If the person survives, then `did_die_from_infection` should be `False`.
-		# Otherwise, `did_die_from_infection` should be `True`.
-		# Append the results of the infection to the logfile.
-		pass
+		if did_die_from_infection:
+			content = f"{person._id} died from infection."
+		else:
+			content = f"{person._id} survived infection."
+
+		self.write(content, verbose=False)
 
 	def log_cycle(
 			self,

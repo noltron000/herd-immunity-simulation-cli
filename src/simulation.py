@@ -1,9 +1,12 @@
-import math, random, sys
-random.seed(42)
+import random
+import sys
+
 from logger import Logger
 from person import Person
 from population import Population
 from virus import Virus
+
+random.seed(42)
 
 ####################
 # Simulation Class #
@@ -47,6 +50,15 @@ class Simulation:
 		file_name = Logger.generate_file_name(population, virus)
 		self.logger = Logger(file_name)
 
+		self.logger.log_vaccination_request_exceeded(
+			population.initial_vaccinations,
+			len(population.filter(is_vaccinated=True)),
+		)
+		self.logger.log_infection_request_exceeded(
+			population.initial_infections,
+			len(population.filter(is_infected=True)),
+		)
+
 	def should_continue(self):
 		'''
 		The simulation should only end if the entire population is dead,
@@ -57,15 +69,13 @@ class Simulation:
 				`True` for simulation should continue, `False` if it should end.
 		'''
 		# Everyone is dead!
-		if len(self.population.filter(is_alive=True)) == 0:
-			return False
+		has_living_people = len(self.population.filter(is_alive=True)) > 0
 
 		# No one is infected!
-		elif len(self.population.filter(is_infected=True)) == 0:
-			return False
+		has_infected_people = len(self.population.filter(is_infected=True)) > 0
 
 		# Simulation needs to continue.
-		else: return True
+		return has_living_people and has_infected_people
 
 
 	def run(self):
@@ -139,6 +149,8 @@ class Simulation:
 		# First, kill sick people.
 		for infected in self.population.filter(is_dormant=False):
 			survives = infected.resolve_infection()
+			# WARN: Disabled this logger because it spammed too many entries.
+			# self.logger.log_infection_survival(infected, not survives)
 			if survives: newly_immune.append(infected)
 			else: new_deaths.append(infected)
 
@@ -173,27 +185,20 @@ class Simulation:
 		assert person1.is_alive == True
 		assert person2.is_alive == True
 
-		# Determine if someone getting sick is even possible.
-		if person1.infection == person2.infection:
-			# Both people are sick (or neither are sick)!
-			# Nothing happens in either scenario.
-			pass
+		# To spread an infection, one person must be sick,
+		# and the other person must not be sick.
+		infected_person = person1 if person1.infection is not None else person2
+		exposed_person = person2 if infected_person is person1 else person1
 
-		# One person must be sick, and the other is not.
-		# This may cause an infection...
-		else:
-			# Determine who is sick, and who is not.
-			sick_person: Person
-			healthy_person: Person
-			if person1.infection != None:
-				sick_person = person1
-				healthy_person = person2
-			else:
-				sick_person = person2
-				healthy_person = person1
+		# Determine if an infection occured, and return the boolean.
+		did_infect = False
+		if infected_person.infection is not None:
+			did_infect = exposed_person.resolve_exposure(infected_person.infection)
 
-			# Resolve the exposure...
-			healthy_person.resolve_exposure(sick_person.infection)
+		# WARN: Disabled this logger because it spammed too many entries.
+		# self.logger.log_interaction(infected_person, exposed_person, did_infect)
+
+		return did_infect
 
 ##################
 # CLI Entrypoint #

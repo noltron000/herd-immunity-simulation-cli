@@ -1,7 +1,10 @@
-import math, random, sys
-random.seed(42)
+import math
+import random
+
 from person import Person
 from virus import Virus
+
+random.seed(42)
 
 ####################
 # Population Class #
@@ -49,10 +52,6 @@ class Population:
 		can_be_vaccinated = self.filter(is_infected=False, is_vaccinated=False)
 		num_vaccinations = min(num_vaccinations, len(can_be_vaccinated))
 
-		# XXX TODO XXX
-		# Add a log event a situation: can't vaccinate given number of people.
-		# The number cannot be reached; too many people are vaccinated or sick already.
-
 		# Vaccinate a random set of the population.
 		people_to_vaccinate = random.sample(can_be_vaccinated, num_vaccinations)
 		for person in people_to_vaccinate:
@@ -64,10 +63,6 @@ class Population:
 		# We can only infect people who aren't already sick or vaccinated.
 		can_be_infected = self.filter(is_infected=False, is_vaccinated=False)
 		num_infections = min(num_infections, len(can_be_infected))
-
-		# XXX TODO XXX
-		# Add a log event a situation: can't infect given number of people.
-		# The number cannot be reached; too many people are vaccinated or sick already.
 
 		# Infect a random set of the population (that is not vaccinated).
 		people_to_infect = random.sample(can_be_infected, num_infections)
