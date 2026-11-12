@@ -18,25 +18,22 @@ The `__init__` method there creates a large number of people using [the `Person`
 From there, various functions from [the `Simulation` class](./src/simulation.py) do the heavy lifting.
 In particular, you could check out out the methods `run()`, `cycle_step()`, and `interaction()`.
 
-## Getting Started
-### Running the App
+## Running the App
 1. *Fork* or *Clone* this repository into a local directory of your choice.
-	- For example, you could run `git clone https://github.com/noltron000/herd-immunity`.
+	For example, you could run:
+	~~~bash
+	git clone https://github.com/noltron000/herd-immunity
+	~~~
 1. Navigate into the root of the directory with your terminal.
 	- Use the `cd` command to get there.
-1. Run the app with `python3 src/simulation.py`.
+1. Run the app with:
+	~~~bash
+ 	python3 src/simulation.py
+	~~~
 	- While you can provide command-line arguments, running the app with no arguments will make the app default to using *Ebola* virus data, with a preset population size.
-	- You will see the output in your terminal.
-		It will also generate a text logfile (although its contents may be exactly the same as the included textfile, so no perceivable file changes may occur).
+	- You will see the output in your terminal. It will also generate a text logfile (although its contents may be exactly the same as the included textfile, so no perceivable file changes may occur).
 
-### Running Tests
-Install the project's test dependencies, then run the suite from the repository root:
-~~~bash
-python -m pip install -e ".[test]"
-python -m pytest
-~~~
-
-#### Customizing Inputs
+### Customizing Inputs
 By default, this project runs a simulation of Ebola, set up as a default at the end of `src/simulation.py`.
 That uses the following parameters:
 
@@ -59,4 +56,11 @@ Replace each `{...}` placeholder with your input; omit `{INITIAL_INFECTIONS}` if
 Here is an example to use:
 ~~~bash
 python3 src/simulation.py COVID 0.30 0.30 10000 0.00 10
+~~~
+
+## Running Tests
+Install the project's test dependencies, then run the suite from the repository root:
+~~~bash
+python -m pip install -e ".[test]"
+python -m pytest
 ~~~
