@@ -1,9 +1,9 @@
 # Herd Immunity Simulation
 This project simulates *Herd Immunity*, modeling how a virus moves through a population where some (but not all) of a population is vaccinated against the virus.
 
-<aside align="center">
+<div align="center">
 	<img src="./mock-simulation.gif" alt="Herd immunity simulation output" width="640" />
-</aside>
+</div>
 
 > #### Nolt's Note
 > This project template was originally created in 2018/2019, before the COVID-19 pandemic.
